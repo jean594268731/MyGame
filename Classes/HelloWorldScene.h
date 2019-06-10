@@ -43,6 +43,9 @@ public:
     CREATE_FUNC(HelloWorld);
 
 	cocos2d::Sprite * sprite;
+
+	//ˆÚ“®•û–@ 0¶,1‰º,2‰E,3ã
+	int state;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
