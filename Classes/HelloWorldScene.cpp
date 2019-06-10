@@ -101,20 +101,21 @@ bool HelloWorld::init()
         this->addChild(label, 1);
     }
 
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-    if (sprite == nullptr)
-    {
-        problemLoading("'HelloWorld.png'");
-    }
-    else
-    {
-        // position the sprite on the center of the screen
-        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+	sprite = Sprite::create("nekodora.jpg");
+	this->addChild(sprite);
 
-        // add the sprite as a child to this layer
-        this->addChild(sprite, 0);
-    }
+	sprite -> setPosition(Vec2(900.0f, 600.0f));
+	//sprite->setRotation(45.0f);
+	//sprite->setScale(3.0f, 4.0f);
+	//sprite->setFlippedX(true);
+	//sprite->setFlippedY(true);
+	//sprite->setVisible(false);
+	//sprite->setColor(Color3B(0xff, 0x00, 0x00));
+	//sprite->setOpacity(0x80);
+
+
+	//Update関数を無効にする
+	this->scheduleUpdate();
     return true;
 }
 
@@ -131,3 +132,36 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 
 }
+
+void HelloWorld::update(float delta)
+{
+	//毎フレーム処理を描く
+	// スプライトの現在座標を取得
+	Vec2 pos = sprite->getPosition();
+	// 座標を移動させる
+	pos += Vec2(-2.0f, 0.0f);
+	// 移動後の座標を反映 
+	sprite->setPosition(pos);
+	float opa = sprite->getOpacity();
+	opa -= 255.0f/300.0f;
+	sprite->setOpacity(opa);
+
+
+
+	/*if (pos.x > 0 && pos.y < 0) {
+		pos += Vec2(-3.0f, 0.0f);
+		sprite->setPosition(pos);
+	}
+	if (pos.x < 0 && pos.y > 0) {
+		pos += Vec2(0.0f, -3.0f);
+		sprite->setPosition(pos);
+	}
+	if (pos.x > 0 && pos.y > 0) {
+		pos += Vec2(3.0f, 0.0f);
+		sprite->setPosition(pos);
+	}
+	if (pos.x > 0 && pos.y < 0) {
+		pos += Vec2(0.0f, 3.0f);
+		sprite->setPosition(pos);
+	}*/
+} 
