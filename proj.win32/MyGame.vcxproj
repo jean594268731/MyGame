@@ -68,10 +68,12 @@
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A\lib;$(ProjectDir)lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A\lib;$(ProjectDir)lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -89,7 +91,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libcurl.lib;%(AdditionalDependencies);$(_COCOS_LIB_WIN32_BEGIN);$(_COCOS_LIB_WIN32_END)</AdditionalDependencies>
+      <AdditionalDependencies>libcurl.lib;libcocos2d.lib;%(AdditionalDependencies);$(_COCOS_LIB_WIN32_BEGIN);$(_COCOS_LIB_WIN32_END)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories);$(_COCOS_LIB_PATH_WIN32_BEGIN);$(_COCOS_LIB_PATH_WIN32_END)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -101,15 +103,36 @@
       </Command>
     </PostBuildEvent>
     <PreLinkEvent>
-      <Command>
-      </Command>
+      <Command>if not exist "$(OutDir)" mkdir "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\freetype2\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\glfw3\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\curl\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\jpeg\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\png\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\tiff\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\webp\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\websockets\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2dexternal\win32-specific\zlib\prebuilt\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\win32-specific\icon\prebuilt\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\win32-specific\gles\prebuilt\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\win32-specific\OpenalSoft\prebuilt\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\win32-specific\MP3Decoder\prebuilt\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\win32-specific\OggDecoder\prebuilt\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\sqlite3\libraries\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\chipmunk\prebuilt\win32\debug-lib\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\bullet\prebuilt\win32\debug\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\Box2D\prebuilt\win32\debug\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\openssl\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\uv\prebuilt\win32\*.*" "$(OutDir)"</Command>
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup>
     <CustomBuildStep>
       <Command>if not exist "$(OutDir)" mkdir "$(OutDir)"
 xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
-      </Command>
+      
+
+copy "$(ProjectDir)lib\$(Configuration)\libcocos2d.dll" "$(OutDir)"   </Command>
       <Outputs>$(TargetName).cab</Outputs>
       <Inputs>$(TargetFileName)</Inputs>
     </CustomBuildStep>
@@ -130,7 +153,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libcurl.lib;%(AdditionalDependencies);$(_COCOS_LIB_WIN32_BEGIN);$(_COCOS_LIB_WIN32_END)</AdditionalDependencies>
+      <AdditionalDependencies>libcurl.lib;libcocos2d.lib;%(AdditionalDependencies);$(_COCOS_LIB_WIN32_BEGIN);$(_COCOS_LIB_WIN32_END)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories);$(_COCOS_LIB_PATH_WIN32_BEGIN);$(_COCOS_LIB_PATH_WIN32_END)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -144,8 +167,27 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
       </Command>
     </PostBuildEvent>
     <PreLinkEvent>
-      <Command>
-      </Command>
+      <Command>if not exist "$(OutDir)" mkdir "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\freetype2\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\glfw3\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\curl\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\jpeg\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\png\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\tiff\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\webp\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\websockets\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2dexternal\win32-specific\zlib\prebuilt\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\win32-specific\icon\prebuilt\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\win32-specific\gles\prebuilt\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\win32-specific\OpenalSoft\prebuilt\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\win32-specific\MP3Decoder\prebuilt\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\win32-specific\OggDecoder\prebuilt\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\sqlite3\libraries\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\chipmunk\prebuilt\win32\debug-lib\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\bullet\prebuilt\win32\debug\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\Box2D\prebuilt\win32\debug\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\openssl\prebuilt\win32\*.*" "$(OutDir)"
+xcopy /Y /Q "$(ProjectDir)..\cocos2d\external\uv\prebuilt\win32\*.*" "$(OutDir)"</Command>
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -157,15 +199,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="main.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\cocos2d\cocos\2d\libcocos2d.vcxproj">
-      <Project>{98a51ba8-fc3a-415b-ac8f-8c7bd464e93e}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\cocos2d\cocos\editor-support\spine\proj.win32\libSpine.vcxproj">
-      <Project>{b7c2a162-dec9-4418-972e-240ab3cbfcae}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
