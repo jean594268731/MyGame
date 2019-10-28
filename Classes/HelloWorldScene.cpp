@@ -188,28 +188,30 @@ void HelloWorld::draw(Renderer * renderer, const Mat4& transform, uint32_t flags
 	//color[2] = Vec3(0, 1, 0);//—Î
 	//color[3] = Vec3(0, 0, 1);//Â
 
-	counter++;
+	//counter++;
 
-	float red;
-	float green;
-	float blue;
+	
 
-	if (step2)//step2‚ÌŽž
-	{
-		red = 0.0f;
-		green = 1.0f - counter / 60.0f;
-		blue = 0.0f + counter / 60.0f;
-	}
-	else//step1‚ÌŽž
-	{
-		red = 1.0f - counter / 60.0f;
-		green = 0.0f + counter / 60.0f;
-		blue = 0.0f;
-		if (counter >= 60.0f) {
-			step2 = true;
-			counter = 0;
-		}
-	}
+	//if (step2)//step2‚ÌŽž
+	//{
+	//	red = 0.0f;
+	//	green = 1.0f - counter / 60.0f;
+	//	blue = 0.0f + counter / 60.0f;
+	//}
+	//else//step1‚ÌŽž
+	//{
+	//	red = 1.0f - counter / 60.0f;
+	//	green = 0.0f + counter / 60.0f;
+	//	blue = 0.0f;
+	//	if (counter >= 60.0f) {
+	//		step2 = true;
+	//		counter = 0;
+	//	}
+	//}
+
+	float red = 1.0f;
+	float green = 0.0f;
+	float blue = 0.0f;
 
 	color[0] = Vec3(red, green, blue);
 	color[1] = Vec3(red, green, blue);
