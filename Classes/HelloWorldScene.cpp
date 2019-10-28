@@ -216,14 +216,10 @@ void HelloWorld::draw(Renderer * renderer, const Mat4& transform, uint32_t flags
 	pos[2].x += 0.1f; pos[2].y += 0.1f;
 	pos[3].x += 0.1f; pos[3].y += 0.1f;
 
-	 red = 0.0f;
-	 green = 0.0f;
-	 blue = 1.0f;
-
-	color[0] = Vec3(red, green, blue);
-	color[1] = Vec3(red, green, blue);
-	color[2] = Vec3(red, green, blue);
-	color[3] = Vec3(red, green, blue);
+	color[0] = Vec3(0, 0, 1);
+	color[1] = Vec3(0, 0, 1);
+	color[2] = Vec3(0, 0, 1);
+	color[3] = Vec3(0, 0, 1);
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
