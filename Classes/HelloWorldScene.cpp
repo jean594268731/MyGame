@@ -115,6 +115,35 @@ bool HelloWorld::init()
         // add the sprite as a child to this layer
         this->addChild(sprite, 0);
     }
+	//OpenGLのエラーコードを受ける
+	GLenum error;
+
+	m_pProgram = new GLProgram;
+
+	//シェーダをテキストファイルから読み込んでコンパイル
+	m_pProgram->initWithFilenames("shaders/shader_0tex.vsh", "shaders/shader_0tex.fsh");
+	error = glGetError();
+
+	//attribute変数に属性インディックスを割り振る
+	m_pProgram->bindAttribLocation("a_position", GLProgram::VERTEX_ATTRIB_POSITION);
+	error = glGetError();
+
+	//attribute変数に属性インディックスを割り振る
+	m_pProgram->bindAttribLocation("a_color", GLProgram::VERTEX_ATTRIB_COLOR);
+	error = glGetError();
+
+	//シェーダプログラムをリンク
+	m_pProgram->link();
+	error = glGetError();
+
+	//uniform変数のリストを保存
+	m_pProgram->updateUniforms();
+	error = glGetError();
+
+	counter = 0;
+
+	step2 = false;
+
     return true;
 }
 
@@ -130,4 +159,73 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
 
+}
+
+void HelloWorld::draw(Renderer * renderer, const Mat4& transform, uint32_t flags)
+{
+	GLenum error;
+	//指定したフラグに対応する属性インディックスだけを有効して、他は無効にする
+	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);;
+	error = glGetError();
+	//シェーダを有効化する
+	m_pProgram->use();
+	error = glGetError();
+
+	//三角形の4頂点分の座標
+	Vec3 pos[4];
+	Vec3 color[4];
+	const float x = 0.7f;
+	const float y = 0.7f;
+	//座標を1点ずつ設定
+	pos[0] = Vec3(-x, -y, 0);
+	pos[1] = Vec3(-x, y, 0);
+	pos[2] = Vec3(x, -y, 0);
+	pos[3] = Vec3(x, y, 0);
+	
+	//カラーを一点ずつ設定
+	//color[0] = Vec3(0, 0, 0);//黒
+	//color[1] = Vec3(1, 0, 0);//赤
+	//color[2] = Vec3(0, 1, 0);//緑
+	//color[3] = Vec3(0, 0, 1);//青
+
+	counter++;
+
+	float red;
+	float green;
+	float blue;
+
+	if (step2)//step2の時
+	{
+		red = 0.0f;
+		green = 1.0f - counter / 60.0f;
+		blue = 0.0f + counter / 60.0f;
+	}
+	else//step1の時
+	{
+		red = 1.0f - counter / 60.0f;
+		green = 0.0f + counter / 60.0f;
+		blue = 0.0f;
+		if (counter >= 60.0f) {
+			step2 = true;
+			counter = 0;
+		}
+	}
+
+	color[0] = Vec3(red, green, blue);
+	color[1] = Vec3(red, green, blue);
+	color[2] = Vec3(red, green, blue);
+	color[3] = Vec3(red, green, blue);
+
+
+	
+	//指定した属性インディックスに、データを関連づける
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, pos);
+
+	//指定した属性インディックスに、データを関連づける
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 3, GL_FLOAT, GL_FALSE, 0, color);
+
+	//4頂点分のデータで三角形を描画する
+	//glDrawArrays(GL_TRIANGLES, 0, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	error = glGetError();
 }
