@@ -188,26 +188,6 @@ void HelloWorld::draw(Renderer * renderer, const Mat4& transform, uint32_t flags
 	//color[2] = Vec3(0, 1, 0);//緑
 	//color[3] = Vec3(0, 0, 1);//青
 
-	//counter++;
-
-	
-
-	//if (step2)//step2の時
-	//{
-	//	red = 0.0f;
-	//	green = 1.0f - counter / 60.0f;
-	//	blue = 0.0f + counter / 60.0f;
-	//}
-	//else//step1の時
-	//{
-	//	red = 1.0f - counter / 60.0f;
-	//	green = 0.0f + counter / 60.0f;
-	//	blue = 0.0f;
-	//	if (counter >= 60.0f) {
-	//		step2 = true;
-	//		counter = 0;
-	//	}
-	//}
 
 	float red = 1.0f;
 	float green = 0.0f;
@@ -229,5 +209,23 @@ void HelloWorld::draw(Renderer * renderer, const Mat4& transform, uint32_t flags
 	//4頂点分のデータで三角形を描画する
 	//glDrawArrays(GL_TRIANGLES, 0, 4);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+	//青四角形の描画
+	pos[0].x += 0.1f; pos[0].y += 0.1f;
+	pos[1].x += 0.1f; pos[1].y += 0.1f;
+	pos[2].x += 0.1f; pos[2].y += 0.1f;
+	pos[3].x += 0.1f; pos[3].y += 0.1f;
+
+	 red = 0.0f;
+	 green = 0.0f;
+	 blue = 1.0f;
+
+	color[0] = Vec3(red, green, blue);
+	color[1] = Vec3(red, green, blue);
+	color[2] = Vec3(red, green, blue);
+	color[3] = Vec3(red, green, blue);
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
 	error = glGetError();
 }
