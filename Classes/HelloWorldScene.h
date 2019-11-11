@@ -44,6 +44,10 @@ public:
 
 	int counter;
 	bool step2;
+
+	int uniform_sampler;
+
+	cocos2d::Texture2D* m_pTextuer;
     
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);

@@ -113,7 +113,7 @@ bool HelloWorld::init()
         sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 
         // add the sprite as a child to this layer
-        this->addChild(sprite, 0);
+       // this->addChild(sprite, 0);
     }
 	//OpenGLのエラーコードを受ける
 	GLenum error;
@@ -121,7 +121,7 @@ bool HelloWorld::init()
 	m_pProgram = new GLProgram;
 
 	//シェーダをテキストファイルから読み込んでコンパイル
-	m_pProgram->initWithFilenames("shaders/shader_0tex.vsh", "shaders/shader_0tex.fsh");
+	m_pProgram->initWithFilenames("shaders/shader_1tex.vsh", "shaders/shader_1tex.fsh");
 	error = glGetError();
 
 	//attribute変数に属性インディックスを割り振る
@@ -132,6 +132,10 @@ bool HelloWorld::init()
 	m_pProgram->bindAttribLocation("a_color", GLProgram::VERTEX_ATTRIB_COLOR);
 	error = glGetError();
 
+	//attribute変数に属性インディックスを割り振る
+	m_pProgram->bindAttribLocation("a_texCoord", GLProgram::VERTEX_ATTRIB_TEX_COORD);
+	error = glGetError();
+
 	//シェーダプログラムをリンク
 	m_pProgram->link();
 	error = glGetError();
@@ -140,9 +144,12 @@ bool HelloWorld::init()
 	m_pProgram->updateUniforms();
 	error = glGetError();
 
-	counter = 0;
+	//uniform変数の番号を取得
+	uniform_sampler = glGetUniformLocation(m_pProgram->getProgram(), "sampler");
+	//テクスチャ読み込み
+	m_pTextuer = Director::getInstance()->getTextureCache()->addImage("ink.png");
 
-	step2 = false;
+	Director::getInstance()->setClearColor(Color4F(0, 1, 0, 0));
 
     return true;
 }
@@ -163,17 +170,28 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 void HelloWorld::draw(Renderer * renderer, const Mat4& transform, uint32_t flags)
 {
+	//減算合成
+	//glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
+	//glBlendFunc(GL_ONE, GL_ONE);
+
+	//半透明合成
+	GL::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	GLenum error;
 	//指定したフラグに対応する属性インディックスだけを有効して、他は無効にする
-	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);;
+	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR
+		| GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
 	error = glGetError();
 	//シェーダを有効化する
 	m_pProgram->use();
 	error = glGetError();
 
+	
+
 	//三角形の4頂点分の座標
 	Vec3 pos[4];
-	Vec3 color[4];
+	Vec4 color[4];
+	Vec2 uv[4];
 	const float x = 0.7f;
 	const float y = 0.7f;
 	//座標を1点ずつ設定
@@ -193,10 +211,16 @@ void HelloWorld::draw(Renderer * renderer, const Mat4& transform, uint32_t flags
 	float green = 0.0f;
 	float blue = 0.0f;
 
-	color[0] = Vec3(red, green, blue);
-	color[1] = Vec3(red, green, blue);
-	color[2] = Vec3(red, green, blue);
-	color[3] = Vec3(red, green, blue);
+	color[0] = Vec4(1, 1, 1, 1);
+	color[1] = Vec4(1, 1, 1, 1);
+	color[2] = Vec4(1, 1, 1, 1);
+	color[3] = Vec4(1, 1, 1, 1);
+
+	//テクスチャ座標を一点ずつ設定
+	uv[0] = Vec2(0, 1);
+	uv[1] = Vec2(0, 0);
+	uv[2] = Vec2(1, 1);
+	uv[3] = Vec2(1, 0);
 
 
 	
@@ -204,24 +228,32 @@ void HelloWorld::draw(Renderer * renderer, const Mat4& transform, uint32_t flags
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, pos);
 
 	//指定した属性インディックスに、データを関連づける
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 3, GL_FLOAT, GL_FALSE, 0, color);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, color);
+
+
+	//指定した属性インディックスに、データを関連づける
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, 0, uv);
+
+	//指定したuniform変数にテクスチャを関連つける
+	glUniform1i(uniform_sampler, 0);
+	GL::bindTexture2D(m_pTextuer->getName());
 
 	//4頂点分のデータで三角形を描画する
 	//glDrawArrays(GL_TRIANGLES, 0, 4);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-	//青四角形の描画
-	pos[0].x += 0.1f; pos[0].y += 0.1f;
-	pos[1].x += 0.1f; pos[1].y += 0.1f;
-	pos[2].x += 0.1f; pos[2].y += 0.1f;
-	pos[3].x += 0.1f; pos[3].y += 0.1f;
+	////青四角形の描画
+	//pos[0].x += 0.1f; pos[0].y += 0.1f;
+	//pos[1].x += 0.1f; pos[1].y += 0.1f;
+	//pos[2].x += 0.1f; pos[2].y += 0.1f;
+	//pos[3].x += 0.1f; pos[3].y += 0.1f;
 
-	color[0] = Vec3(0, 0, 1);
-	color[1] = Vec3(0, 0, 1);
-	color[2] = Vec3(0, 0, 1);
-	color[3] = Vec3(0, 0, 1);
+	//color[0] = Vec4(0, 0, 1, 0.5f);
+	//color[1] = Vec4(0, 0, 1, 0.5f);
+	//color[2] = Vec4(0, 0, 1, 0.5f);
+	//color[3] = Vec4(0, 0, 1, 0.5f);
 
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 	error = glGetError();
 }
