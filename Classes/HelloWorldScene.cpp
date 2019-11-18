@@ -200,6 +200,7 @@ void HelloWorld::draw(Renderer * renderer, const Mat4& transform, uint32_t flags
 	Vec2 uv[6];
 	const float x = 50.0f;
 	const float y = 50.0f;
+	const float z = 50.0f;
 	//座標を1点ずつ設定
 	pos[0] = Vec3(-x, -y,0);
 	pos[1] = Vec3(-x, y, 0);
@@ -282,7 +283,7 @@ void HelloWorld::draw(Renderer * renderer, const Mat4& transform, uint32_t flags
 	//練習問題4-2 3**********
 	float scale =CC_DEGREES_TO_RADIANS(3.0f * counter);
 	//引数をラジアンとしてサイン関数(6.28ぐらいで一周期)
-	scale = sinf(scale);
+	scale = sinf(scale) + 2.0f;
 	//***************************
 	//Mat4::createScale(2.0f, 2.0f, 2.0f, & matScale);
 	Mat4::createScale(Vec3(scale, scale, scale), &matScale);
@@ -290,8 +291,8 @@ void HelloWorld::draw(Renderer * renderer, const Mat4& transform, uint32_t flags
 	Mat4 matRot;
 	Mat4 matRotX, matRotY, matRotZ;
 	//各軸周りを計算し、最後に合成
-	Mat4::createRotationZ(0, &matRotZ);
-	Mat4::createRotationX(0, &matRotX);
+	Mat4::createRotationZ(yaw, &matRotZ);
+	Mat4::createRotationX(yaw, &matRotX);
 	Mat4::createRotationY(yaw, &matRotY);
 	//回転を合成
 	matRot = matRotY * matRotX * matRotZ;
@@ -323,20 +324,98 @@ void HelloWorld::draw(Renderer * renderer, const Mat4& transform, uint32_t flags
 
 	//4頂点分のデータで三角形を描画する
 	//glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	//座標を1点ずつ設定
+	pos[0] = Vec3(-x, -y, z);
+	pos[1] = Vec3(-x, y, z);
+	pos[2] = Vec3(x, -y, z);
+	//三角形２つめ
+	pos[3] = Vec3(-x, y, z);
+	pos[4] = Vec3(x, -y, z);
+	pos[5] = Vec3(x, y, z);
+
+
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
 
-	////青四角形の描画
-	//pos[0].x += 0.1f; pos[0].y += 0.1f;
-	//pos[1].x += 0.1f; pos[1].y += 0.1f;
-	//pos[2].x += 0.1f; pos[2].y += 0.1f;
-	//pos[3].x += 0.1f; pos[3].y += 0.1f;
+	
+	//合成したWVP行列をシェーダに送る
+	//2枚目
+	//座標を1点ずつ設定
+	pos[0] = Vec3(-x, -y, -z);
+	pos[1] = Vec3(-x,  y, -z);
+	pos[2] = Vec3( x, -y, -z);
+	//三角形２つめ		
+	pos[3] = Vec3(-x, y,  -z);
+	pos[4] = Vec3( x,-y,  -z);
+	pos[5] = Vec3( x, y,  -z);
 
-	//color[0] = Vec4(0, 0, 1, 0.5f);
-	//color[1] = Vec4(0, 0, 1, 0.5f);
-	//color[2] = Vec4(0, 0, 1, 0.5f);
-	//color[3] = Vec4(0, 0, 1, 0.5f);
+	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
 
-	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	//3枚目
+	//座標を1点ずつ設定
+	pos[0] = Vec3(x, -y, z);
+	pos[1] = Vec3(x, y, z);
+	pos[2] = Vec3(x, -y, -z);
+	//三角形２つめ	
+	pos[3] = Vec3(x, -y, -z);
+	pos[4] = Vec3(x, y, z);
+	pos[5] = Vec3(x, y, -z);
+
+	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
+
+	//4枚目
+	//座標を1点ずつ設定
+	pos[0] = Vec3(-x, -y, z);
+	pos[1] = Vec3(-x, y,  z);
+	pos[2] = Vec3(-x, -y, -z);
+	//三角形２つめ		
+	pos[3] = Vec3(-x, -y, -z);
+	pos[4] = Vec3(-x, y,  z);
+	pos[5] = Vec3(-x, y, -z);
+
+	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
+
+	//4枚目
+	//座標を1点ずつ設定
+	pos[0] = Vec3(-x, -y, -z);
+	pos[1] = Vec3(-x, y, -z);
+	pos[2] = Vec3(x, -y, -z);
+	//三角形２つめ		
+	pos[3] = Vec3(-x, y, -z);
+	pos[4] = Vec3(x, -y, -z);
+	pos[5] = Vec3(x, y, -z);
+
+	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
+
+	//5枚目
+	//座標を1点ずつ設定
+	pos[0] = Vec3(-x, -y, -z);
+	pos[1] = Vec3(-x, y, -z);
+	pos[2] = Vec3(x, -y, -z);
+	//三角形２つめ		
+	pos[3] = Vec3(-x, y, -z);
+	pos[4] = Vec3(x, -y, -z);
+	pos[5] = Vec3(x, y, -z);
+
+	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
+
+	//6枚目
+	//座標を1点ずつ設定
+	pos[0] = Vec3(-x, -y, -z);
+	pos[1] = Vec3(-x, y, -z);
+	pos[2] = Vec3(x, -y, -z);
+	//三角形２つめ		
+	pos[3] = Vec3(-x, y, -z);
+	pos[4] = Vec3(x, -y, -z);
+	pos[5] = Vec3(x, y, -z);
+
+	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
 
 	error = glGetError();
 }
