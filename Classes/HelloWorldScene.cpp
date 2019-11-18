@@ -113,7 +113,7 @@ bool HelloWorld::init()
         sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 
         // add the sprite as a child to this layer
-       // this->addChild(sprite, 0);
+       //this->addChild(sprite, 0);
     }
 	//OpenGLのエラーコードを受ける
 	GLenum error;
@@ -364,8 +364,8 @@ void HelloWorld::draw(Renderer * renderer, const Mat4& transform, uint32_t flags
 
 	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
-
-	//4枚目
+	//左
+	//3枚目
 	//座標を1点ずつ設定
 	pos[0] = Vec3(-x, -y, z);
 	pos[1] = Vec3(-x, y,  z);
@@ -377,7 +377,7 @@ void HelloWorld::draw(Renderer * renderer, const Mat4& transform, uint32_t flags
 
 	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
-
+	//右
 	//4枚目
 	//座標を1点ずつ設定
 	pos[0] = Vec3(-x, -y, -z);
@@ -390,32 +390,32 @@ void HelloWorld::draw(Renderer * renderer, const Mat4& transform, uint32_t flags
 
 	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
-
+	//上
 	//5枚目
-	//座標を1点ずつ設定
-	pos[0] = Vec3(-x, -y, -z);
-	pos[1] = Vec3(-x, y, -z);
-	pos[2] = Vec3(x, -y, -z);
-	//三角形２つめ		
-	pos[3] = Vec3(-x, y, -z);
-	pos[4] = Vec3(x, -y, -z);
-	pos[5] = Vec3(x, y, -z);
+	////座標を1点ずつ設定
+	//pos[0] = Vec3(-x, -y, -z);
+	//pos[1] = Vec3(-x, y, -z);
+	//pos[2] = Vec3(x, -y, -z);
+	////三角形２つめ		
+	//pos[3] = Vec3(-x, y, -z);
+	//pos[4] = Vec3(x, -y, -z);
+	//pos[5] = Vec3(x, y, -z);
 
-	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
-
+	//glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
+	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
+	//下
 	//6枚目
-	//座標を1点ずつ設定
-	pos[0] = Vec3(-x, -y, -z);
-	pos[1] = Vec3(-x, y, -z);
-	pos[2] = Vec3(x, -y, -z);
-	//三角形２つめ		
-	pos[3] = Vec3(-x, y, -z);
-	pos[4] = Vec3(x, -y, -z);
-	pos[5] = Vec3(x, y, -z);
+	////座標を1点ずつ設定
+	//pos[0] = Vec3(-x, -y, -z);
+	//pos[1] = Vec3(-x, y, -z);
+	//pos[2] = Vec3(x, -y, -z);
+	////三角形２つめ		
+	//pos[3] = Vec3(-x, y, -z);
+	//pos[4] = Vec3(x, -y, -z);
+	//pos[5] = Vec3(x, y, -z);
 
-	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
+	//glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
+	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
 
 	error = glGetError();
 }
