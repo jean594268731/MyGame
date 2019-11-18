@@ -47,7 +47,9 @@ public:
 
 	int uniform_sampler;
 
-	cocos2d::Texture2D* m_pTextuer;
+	cocos2d::Texture2D* m_pTexture;
+
+	int uniform_wvp_matrix;
     
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
